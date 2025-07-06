@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>☀️ Weather Forecast App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      max-width: 700px;
+      margin: 80px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      z-index: 1;
+      position: relative;
+    }
+    input, button, select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+    input {
+      width: 60%;
+    }
+    button {
+      margin-left: 10px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    h2, h3 {
+      margin-top: 20px;
+    }
+    .section-title {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    .result, .forecast, .daily-forecast {
+      margin-top: 20px;
+      line-height: 1.8em;
+    }
+    .forecast-card {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+    .voice-info {
+      font-size: 14px;
+      margin-top: 10px;
+      color: #ccc;
+    }
+    .voice-toggle {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+
+  <video autoplay muted loop id="bgVideo">
+    <source src="/static/videos/default.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h2>🌤️ Weather Info</h2>
+    <input type="text" id="city" placeholder="Enter city name...">
+    <button onclick="getWeather()">Get Weather</button>
+    <button onclick="getLocationWeather()">📍 Use My Location</button>
+
+    <div class="voice-info">🔊 Voice Reading: Weather details will be read aloud automatically!</div>
+    <label class="voice-toggle">
+      <input type="checkbox" id="speakToggle" checked> Enable voice reading
+    </label>
+
+    <div class="voice-toggle">
+      🌐 Language:
+      <select id="voiceLang">
+        <option value="en-US" selected>English</option>
+        <option value="hi-IN">Hindi</option>
+        <option value="ar-SA">Arabic</option>
+      </select>
+      <button onclick="speechSynthesis.cancel()" style="margin-left: 10px;">🔄 Reset Voice</button>
+    </div>
+
+    <h3 class="section-title">📍 Current Weather</h3>
+    <div id="result" class="result"></div>
+
+    <h3 class="section-title">🕒 Forecast (Next Few Hours)</h3>
+    <div id="forecast" class="forecast"></div>
+
+    <h3 class="section-title">📅 5-Day Forecast</h3>
+    <div id="daily-forecast" class="daily-forecast"></div>
+  </div>
+
+  <script>
+    function speak(text) {
+      const lang = document.getElementById("voiceLang").value;
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = lang;
+      msg.rate = 0.95;
+      const voices = speechSynthesis.getVoices();
+      msg.voice = voices.find(v => v.lang === lang) || voices[0];
+      speechSynthesis.cancel();
+      speechSynthesis.speak(msg);
+    }
+
+    function setBackground(condition) {
+      const video = document.getElementById("bgVideo");
+      const source = video.querySelector("source");
+      let src = "/static/videos/default.mp4";
+
+      condition = condition.toLowerCase();
+      if (condition.includes("rain") || condition.includes("drizzle") || condition.includes("shower")) {
+        src = "/static/videos/rainy.mp4";
+      } else if (condition.includes("snow")) {
+        src = "/static/videos/snowy.mp4";
+      } else if (condition.includes("cloud") || condition.includes("overcast")) {
+        src = "/static/videos/cloudy.mp4";
+      } else if (condition.includes("clear") || condition.includes("sun")) {
+        src = "/static/videos/clear.mp4";
+      } else if (condition.includes("thunder")) {
+        src = "/static/videos/thunder.mp4";
+      } else if (condition.includes("fog") || condition.includes("mist") || condition.includes("haze")) {
+        src = "/static/videos/foggy.mp4";
+      }
+
+      if (source.getAttribute("src") !== src) {
+        source.setAttribute("src", src);
+        video.load();
+      }
+    }
+
+    async function getWeather() {
+      const city = document.getElementById("city").value.trim();
+      const speakEnabled = document.getElementById("speakToggle").checked;
+      const lang = document.getElementById("voiceLang").value;
+
+      if (!city) return alert("Please enter a city name");
+
+      let speakText = "";
+
+      const current = await fetch(`/weather_api?city=${encodeURIComponent(city)}`).then(res => res.json());
+      if (current.error) {
+        document.getElementById("result").innerHTML = "❌ " + current.error;
+      } else {
+        document.getElementById("result").innerHTML = `
+          <b>${current.city}</b><br>
+          🌡️ ${current.temperature.celsius}, ${current.temperature.fahrenheit}, ${current.temperature.kelvin}<br>
+          ☁️ ${current.weather}<br>
+          💧 Humidity: ${current.humidity}<br>
+          🌬️ Wind: ${current.wind_speed}
+        `;
+        setBackground(current.weather);
+
+        if (lang === 'hi-IN') {
+          speakText += `मौसम ${current.city} के लिए। तापमान है ${current.temperature.celsius} डिग्री सेल्सियस। हालत: ${current.weather}। आर्द्रता: ${current.humidity}। हवा की गति: ${current.wind_speed}। `;
+        } else if (lang === 'ar-SA') {
+          speakText += `الطقس في ${current.city}. درجة الحرارة ${current.temperature.celsius}. الطقس: ${current.weather}. الرطوبة: ${current.humidity}. سرعة الرياح: ${current.wind_speed}. `;
+        } else {
+          speakText += `Current weather in ${current.city}. Temperature is ${current.temperature.celsius}, that is ${current.temperature.fahrenheit}. Condition is ${current.weather}. Humidity is ${current.humidity}. Wind is ${current.wind_speed}. `;
+        }
+      }
+
+      const forecast = await fetch(`/forecast?city=${encodeURIComponent(city)}`).then(res => res.json());
+      if (forecast.error) {
+        document.getElementById("forecast").innerHTML = "❌ " + forecast.error;
+      } else {
+        let html = "";
+        if (lang === 'hi-IN') {
+          speakText += `अगले कुछ घंटों का पूर्वानुमान: `;
+        } else if (lang === 'ar-SA') {
+          speakText += `توقعات الساعات القادمة: `;
+        } else {
+          speakText += `Hourly forecast: `;
+        }
+
+        forecast.forecast.forEach(f => {
+          html += `
+            <div class="forecast-card">
+              🕒 <b>${f.datetime}</b><br>
+              🌡️ ${f.temperature}<br>
+              ☁️ ${f.weather}
+            </div>
+          `;
+          if (lang === 'hi-IN') {
+            speakText += `${f.datetime} बजे, तापमान ${f.temperature}, मौसम ${f.weather} होगा। `;
+          } else if (lang === 'ar-SA') {
+            speakText += `في ${f.datetime}، ستكون درجة الحرارة ${f.temperature} والطقس ${f.weather}. `;
+          } else {
+            speakText += `At ${f.datetime}, temperature will be ${f.temperature} with ${f.weather}. `;
+          }
+        });
+        document.getElementById("forecast").innerHTML = html;
+      }
+
+      const daily = await fetch(`/daily_forecast?city=${encodeURIComponent(city)}`).then(res => res.json());
+      if (daily.error) {
+        document.getElementById("daily-forecast").innerHTML = "❌ " + daily.error;
+      } else {
+        let html = "";
+        daily.forecast.forEach(d => {
+          html += `
+            <div class="forecast-card">
+              📅 <b>${d.date}</b><br>
+              🌡️ Min: ${d.min_temp} / Max: ${d.max_temp}<br>
+              ☁️ ${d.weather}
+            </div>
+          `;
+        });
+        document.getElementById("daily-forecast").innerHTML = html;
+      }
+
+      if (speakEnabled) speak(speakText);
+    }
+
+    async function getCityFromCoords(lat, lon) {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+      const data = await res.json();
+      return data.address.city || data.address.town || data.address.village || data.address.state;
+    }
+
+    function getLocationWeather() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const city = await getCityFromCoords(lat, lon);
+        if (!city) return alert("City not found from location");
+
+        document.getElementById("city").value = city;
+        getWeather();
+      }, () => {
+        alert("Location permission denied or unavailable.");
+      });
+    }
+
+    window.speechSynthesis.onvoiceschanged = () => {
+      speechSynthesis.getVoices();
+    };
+  </script>
+</body>
+</html>

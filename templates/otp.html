@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enter OTP - Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .otp-box {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #00C9A7;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Background Video -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="/static/videos/sam.mp4" type="video/mp4">
+  </video>
+
+  <!-- ✅ OTP Input Box -->
+  <form class="otp-box" method="POST" action="/verify_otp">
+    <h2>🔑 Enter OTP</h2>
+    <input type="text" name="otp" placeholder="Enter OTP here..." required />
+    <button type="submit">Verify</button>
+  </form>
+
+</body>
+</html>
+<script>
+    function toggleMode() {
+      document.body.classList.toggle("light-mode");
+    }

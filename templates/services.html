@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🛠️ Services - Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 80px auto;
+      background-color: rgba(0, 0, 0, 0.65);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    ul {
+      font-size: 16px;
+      line-height: 1.8em;
+    }
+
+    li::before {
+      content: "✅ ";
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+
+  <!-- 🎥 Background video -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="/static/videos/default.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h2>🛠️ Our Services</h2>
+    <ul>
+      <li>Get real-time current weather details</li>
+      <li>Hourly forecast with temperature and conditions</li>
+      <li>5-day daily forecast summary</li>
+      <li>Text-to-speech weather reading</li>
+      <li>Weather-based background animations</li>
+      <li>Multi-language support (English, Hindi)</li>
+      <li>User login with OTP</li>
+      <li>Search history tracking</li>
+    </ul>
+  </div>
+
+</body>
+</html>

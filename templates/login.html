@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .login-box {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 25px;
+    }
+
+    .login-box input,
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .login-box input {
+      background-color: rgba(255,255,255,0.9);
+      color: #000;
+    }
+
+    .login-box button {
+      background-color: #00C9A7;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-box button:hover {
+      background-color: #00b396;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Background video -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="/static/videos/loginbg.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- ✅ Login Form -->
+  <form class="login-box" method="POST" action="/send_otp">
+    <h2>🔐 Login</h2>
+    <input type="text" name="name" placeholder="Enter your name" required />
+    <input type="email" name="email" placeholder="Enter your email" required />
+    <button type="submit">Send OTP</button>
+  </form>
+
+</body>
+</html>

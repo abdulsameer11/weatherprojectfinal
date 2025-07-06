@@ -1,0 +1,200 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🏠 Home - Weather App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .home-box {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin: 10px 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .weather-btn {
+      background-color: #ffdd57;
+      color: #000;
+    }
+
+    .weather-btn:hover {
+      background-color: #ffd633;
+    }
+
+    .logout-btn {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    .logout-btn:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="home-box">
+    <h2>👋 Hey {{ name }}, what do you want to know about the weather?</h2>
+    <a href="/weather_page"><button class="btn weather-btn">🌦️ Weather Forecast</button></a>
+    <a href="/"><button class="btn logout-btn">🚪 Logout</button></a>
+  </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🏠 Home - Weather App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: transparent;
+      color: #fff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .home-box {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      margin: 50px auto;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin: 10px 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .weather-btn {
+      background-color: #ffdd57;
+      color: #000;
+    }
+
+    .weather-btn:hover {
+      background-color: #ffd633;
+    }
+
+    .logout-btn {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    .logout-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    .info-section {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(0,0,0,0.5);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .info-section h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #ffdd57;
+    }
+
+    .info-section p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .info-section .quote {
+      font-style: italic;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Background Video -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="/static/videos/homebg.mp4" type="video/mp4">
+  </video>
+
+  <!-- ❗ DO NOT TOUCH THIS BOX -->
+  <div class="home-box">
+    <h2>👋 Hey {{ name }}, what do you want to know about the weather?</h2>
+    <a href="/weather"><button class="btn weather-btn">🌦️ Weather Forecast</button></a>
+    <a href="/"><button class="btn logout-btn">🚪 Logout</button></a>
+  </div>
+
+  <!-- ✅ Weather Info Section -->
+  <div class="info-section">
+    <h3>Hey {{ name }}, here is our Collection of Weathers</h3>
+    <p><strong>☀️ Summer:</strong> Hot, sunny, and perfect for beach days. <span class="quote">“Sweat is just your fat crying!”</span></p>
+    <p><strong>🌧️ Monsoon:</strong> Rainy and refreshing, nature at its greenest. <span class="quote">“Some people feel the rain... others just get wet.”</span></p>
+    <p><strong>🍂 Autumn:</strong> Cool breeze, falling leaves, and pumpkin vibes. <span class="quote">“Autumn leaves and pumpkins please!”</span></p>
+    <p><strong>❄️ Winter:</strong> Cold, cozy, and cuddles in blankets. <span class="quote">“It’s so cold, even my thoughts are frozen!”</span></p>
+    <p><strong>🌸 Spring:</strong> Blooming flowers and chirping birds. <span class="quote">“Spring: the season when your allergies come to life!”</span></p>
+  </div>
+
+</body>
+</html>
+
+
+
+
